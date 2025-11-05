@@ -17,30 +17,30 @@ public class AgendamentoTransferenciaEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length=10, nullable=false)
+    @Column(length = 10, nullable = false)
     private String contaOrigem;
 
-    @Column(length=10, nullable=false)
+    @Column(length = 10, nullable = false)
     private String contaDestino;
 
-    @Column(nullable=false, precision=19, scale=2)
+    @Column(nullable = false, precision = 19, scale = 2)
     private BigDecimal valor;
 
-    @Column(nullable=false)
+    @Column(nullable = false)
     private LocalDate dataTransferencia;
 
-    @Column(nullable=false)
+    @Column(nullable = false)
     private OffsetDateTime dataAgendamento;
 
-    @Column(nullable=false, precision=19, scale=2)
+    @Column(nullable = false, precision = 19, scale = 2)
     private BigDecimal taxaFixa;
 
-    @Column(nullable=false, precision=5, scale=4)
+    @Column(nullable = false, precision = 5, scale = 4)
     private BigDecimal taxaPercentual;
 
-    @Column(nullable=false, precision=19, scale=2)
+    @Column(nullable = false, precision = 19, scale = 2)
     private BigDecimal valorTaxaTotal;
 
-    @Column(nullable=false, length=20)
+    @Column(nullable = false, length = 20)
     private String status;
 }

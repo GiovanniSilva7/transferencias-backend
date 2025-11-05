@@ -20,9 +20,10 @@ public class RequisicaoTransferencia {
     @Pattern(regexp = "\\d{10}", message = "Conta de destino deve ter 10 dígitos")
     private String contaDestino;
 
-    @NotNull @DecimalMin("0.01")
+    @NotNull
+    @DecimalMin("0.01")
     private BigDecimal valor;
 
     @NotNull
-    private LocalDate dataTransferencia; 
+    private LocalDate dataTransferencia;
 }

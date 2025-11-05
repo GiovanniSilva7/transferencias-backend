@@ -1,163 +1,74 @@
- Sistema de Agendamento de Transferências Financeiras - Backend
+Backend
 
 Decisões Arquiteturais
 
-Arquitetura Hexagonal (Ports & Adapters)
+Arquitetura MVC
 
-O projeto foi estruturado seguindo a arquitetura hexagonal para garantir:
-- **Desacoplamento**: Lógica de negócio independente de frameworks e tecnologias externas
-- **Testabilidade**: Core da aplicação pode ser testado sem dependências externas
-- **Manutenibilidade**: Facilita mudanças de tecnologia sem impactar o domínio
+Controller: recebe as requisições HTTP.
 
- Estrutura de Camadas:
+Service: centraliza as regras de negócio (ex: cálculo de taxa).
 
-```
-src/main/java/com/transferencias/
-├── domain/                          # Camada de Domínio (Core)
-│   ├── model/                       # Entidades e Value Objects
-│   ├── port/                        # Interfaces (Portas)
-│   │   ├── in/                      # Casos de uso (entrada)
-│   │   └── out/                     # Repositórios e serviços (saída)
-│   └── service/                     # Lógica de negócio
-├── application/                     # Camada de Aplicação
-│   ├── usecase/                     # Implementação dos casos de uso
-│   └── dto/                         # DTOs de transferência
-├── adapter/                         # Adaptadores (Infrastructure)
-│   ├── in/
-│   │   └── web/                     # Controllers REST
-│   └── out/
-│       └── persistence/             # Implementação JPA
-└── config/                          # Configurações Spring
-```
+Repository: faz a persistência via JPA.
 
-Princípios SOLID Aplicados
+Model/Entity: representam as tabelas.
 
-1. **Single Responsibility Principle (SRP)**
-   - Cada classe tem uma única responsabilidade
-   - `TaxaCalculatorService`: apenas calcula taxas
-   - `TransferenciaService`: apenas gerencia transferências
+Mapper: converte entre entidades e DTOs.
 
-2. **Open/Closed Principle (OCP)**
-   - Sistema aberto para extensão (novas regras de taxa)
-   - Fechado para modificação (core não muda)
+SOLID / Clean Code
 
-3. **Liskov Substitution Principle (LSP)**
-   - Interfaces podem ser substituídas por implementações
+Cada classe tem uma única responsabilidade.
 
-4. **Interface Segregation Principle (ISP)**
-   - Interfaces específicas por responsabilidade
+Baixo acoplamento entre camadas.
 
-5. **Dependency Inversion Principle (DIP)**
-   - Dependências apontam para abstrações (ports)
-   - Framework depende do domínio, não o contrário
+DTOs protegem a API de exposição direta do modelo de domínio.
 
-Clean Code
+Banco em memória (H2)
+Simplifica testes e permite reiniciar o estado a cada execução.
 
-- Nomes descritivos e significativos
-- Métodos pequenos e focados
-- Comentários apenas quando necessário
-- Tratamento de exceções customizadas
-- Validações no domínio
-- Testes unitários e de integração
+Java 11
 
-Tecnologias Utilizadas
+Spring Boot 2.7.18
 
-- **Java**: 11
-- **Spring Boot**: 2.7.18 (última versão compatível com Java 11)
-- **Spring Data JPA**: Persistência
-- **H2 Database**: Banco em memória
-- **Lombok**: Redução de boilerplate
-- **MapStruct**: Mapeamento de objetos
-- **JUnit 5 + Mockito**: Testes
-- **Maven**: Gerenciamento de dependências
-- **Swagger/OpenAPI**: Documentação da API
+Spring Web / JPA / Validation
 
-Pré-requisitos
+Lombok
 
-- Java 11
-- Maven 3.6+
-- IDE (IntelliJ IDEA, Eclipse ou VS Code)
+Banco H2 (em memória)
 
- Como Executar
+Arquitetura MVC e princípios SOLID
 
- 1. Clonar o repositório
+CORS configurado para acesso pelo frontend
 
-```bash
-git clone https://github.com/GiovanniSilva7/transferencias-backend.git
-cd transferencias-backend
-```
+Backend
 
- 2. Compilar o projeto
+Cadastro de transferências com:
 
-```bash
-mvn clean install
-```
+Conta de origem e destino (10 dígitos)
 
- 3. Executar a aplicação
+Valor
 
-```bash
-mvn spring-boot:run
-```
+Data da transferência
 
-ou
+Data de agendamento (automática)
 
-```bash
-java -jar target/transferencias-api-1.0.0.jar
-```
+Cálculo automático de taxas conforme tabela:
 
- 4. Acessar a aplicação
+Dias até a transferência	Taxa Fixa	Percentual (%)
+0	R$ 3,00	2,5%
+1 a 10	R$ 12,00	0%
+11 a 20	R$ 0,00	8,2%
+21 a 30	R$ 0,00	6,9%
+31 a 40	R$ 0,00	4,7%
+41 a 50	R$ 0,00	1,7%
 
-- **API**: http://localhost:8080/api
-- **Swagger UI**: http://localhost:8080/swagger-ui.html
-- **H2 Console**: http://localhost:8080/h2-console
-  - JDBC URL: `jdbc:h2:mem:transferenciasdb`
-  - Username: `sa`
-  - Password: *(vazio)*
+Caso não haja taxa aplicável, o sistema retorna um erro.
 
-- Endpoints da API
+Consulta paginada de agendamentos realizados
 
-- Agendar Transferência
-```http
-POST /api/transferencias
-Content-Type: application/json
+Backend (Spring Boot)
 
-{
-  "contaOrigem": "1234567890",
-  "contaDestino": "0987654321",
-  "valorTransferencia": 1000.00,
-  "dataTransferencia": "2025-11-10"
-}
-```
+Pré-requisitos:
 
-Listar Todas as Transferências
-```http
-GET /api/transferencias
-```
+Java 11 instalado
 
-Buscar Transferência por ID
-```http
-GET /api/transferencias/{id}
-```
-
-## Regras de Negócio - Cálculo de Taxa
-
-| Dias de Antecedência | Taxa Fixa (R$) | Taxa Percentual |
-|---------------------|----------------|-----------------|
-| 0 (mesmo dia)       | 3,00           | 2,5%            |
-| 1 a 10             | 12,00          | 0%              |
-| 11 a 20            | 0,00           | 8,2%            |
-| 21 a 30            | 0,00           | 6,9%            |
-| 31 a 40            | 0,00           | 4,7%            |
-| 41 a 50            | 0,00           | 1,7%            |
-| Acima de 50        | **Não permitido** | -           |
-
-Taxa Total = Taxa Fixa + (Valor × Taxa Percentual)
-
-Testes
-
-```bash
-mvn test
-
-# Com cobertura
-mvn test jacoco:report
-```
+Maven configurado (mvn -v)

@@ -26,12 +26,12 @@ public class TransferenciaController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public RespostaTransferencia agendar(@Validated @RequestBody RequisicaoTransferencia req){
+    public RespostaTransferencia agendar(@Validated @RequestBody RequisicaoTransferencia req) {
         return service.agendar(req);
     }
 
     @GetMapping
-    public Page<RespostaTransferencia> listar(Pageable pageable){
+    public Page<RespostaTransferencia> listar(Pageable pageable) {
         return service.listar(pageable);
     }
 }

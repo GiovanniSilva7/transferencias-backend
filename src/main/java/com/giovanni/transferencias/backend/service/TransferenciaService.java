@@ -25,9 +25,10 @@ public class TransferenciaService {
     private final AgendamentoTransferenciaRepository repository;
     private final TaxaCalculator taxaCalculator;
 
-    public RespostaTransferencia agendar(RequisicaoTransferencia req){
+    public RespostaTransferencia agendar(RequisicaoTransferencia req) {
         int dias = (int) ChronoUnit.DAYS.between(LocalDate.now(), req.getDataTransferencia());
-        if(dias < 0) throw new NegocioException("Data da transferência não pode ser no passado");
+        if (dias < 0)
+            throw new NegocioException("Data da transferência não pode ser no passado");
 
         var taxa = taxaCalculator.calcular(dias, req.getValor())
                 .orElseThrow(() -> new NegocioException("Sem taxa aplicável para a data informada"));
@@ -44,10 +45,10 @@ public class TransferenciaService {
         entity.setStatus("SCHEDULED");
 
         entity = repository.save(entity);
-        return TransferenciaMapper.toResponse(entity); 
+        return TransferenciaMapper.toResponse(entity);
     }
 
-    public Page<RespostaTransferencia> listar(Pageable pageable){
-        return repository.findAll(pageable).map(TransferenciaMapper::toResponse); 
+    public Page<RespostaTransferencia> listar(Pageable pageable) {
+        return repository.findAll(pageable).map(TransferenciaMapper::toResponse);
     }
 }

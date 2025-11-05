@@ -9,13 +9,13 @@ import lombok.Getter;
 public class NegocioException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Getter
 	private String chave;
 
 	@Getter
 	private Object[] args;
-	
+
 	public NegocioException(String chave) {
 		this.chave = chave;
 	}
@@ -26,4 +26,3 @@ public class NegocioException extends RuntimeException {
 	}
 
 }
-

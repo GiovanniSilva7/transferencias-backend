@@ -10,7 +10,9 @@ import com.giovanni.transferencias.backend.model.Taxa;
 public class CadeiaRegras {
     private final List<RegraTaxa> regras;
 
-    public CadeiaRegras(RegraTaxa regras, RegraSomenteFixa regraSomenteFixa, RegraSomentePercentual regraSomentePercentual, RegraSomentePercentual regraSomentePercentual2, RegraSomentePercentual regraSomentePercentual3, RegraSomentePercentual regraSomentePercentual4) {
+    public CadeiaRegras(RegraTaxa regras, RegraSomenteFixa regraSomenteFixa,
+            RegraSomentePercentual regraSomentePercentual, RegraSomentePercentual regraSomentePercentual2,
+            RegraSomentePercentual regraSomentePercentual3, RegraSomentePercentual regraSomentePercentual4) {
         this.regras = Arrays.asList(regras);
     }
 
