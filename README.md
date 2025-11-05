@@ -30,7 +30,7 @@ src/main/java/com/transferencias/
 └── config/                          # Configurações Spring
 ```
 
-### Princípios SOLID Aplicados
+Princípios SOLID Aplicados
 
 1. **Single Responsibility Principle (SRP)**
    - Cada classe tem uma única responsabilidade
@@ -83,7 +83,7 @@ Pré-requisitos
  1. Clonar o repositório
 
 ```bash
-git clone https://github.com/seu-usuario/transferencias-backend.git
+git clone https://github.com/GiovanniSilva7/transferencias-backend.git
 cd transferencias-backend
 ```
 
@@ -151,12 +151,11 @@ GET /api/transferencias/{id}
 | 41 a 50            | 0,00           | 1,7%            |
 | Acima de 50        | **Não permitido** | -           |
 
-**Taxa Total = Taxa Fixa + (Valor × Taxa Percentual)**
+Taxa Total = Taxa Fixa + (Valor × Taxa Percentual)
 
 Testes
 
 ```bash
-# Todos os testes
 mvn test
 
 # Com cobertura
